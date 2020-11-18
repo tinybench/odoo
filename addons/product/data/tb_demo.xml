@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data noupdate="1">
+    <record id="tb_demo_plastic_cup_1" model="product.product">
+      <field name="name">一次性塑料杯</field>
+      <field name="list_price">9.99</field>
+      <field name="standard_price">6.66</field>
+      <field name="type">塑料</field>
+      <field name="default_code">PLASTIC_CUP_1</field>
+      <field name="image_1920" type="base64" file="product/static/img/product_plastic_cup_1.png"/>
+    </record>
+  </data>
+</odoo>
