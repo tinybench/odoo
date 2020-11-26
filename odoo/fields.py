@@ -929,6 +929,7 @@ class Field(MetaField('DummyField', (object,), {})):
         # only a single record may be accessed
         record.ensure_one()
 
+        recomputed = False
         if self.compute and (record.id in env.all.tocompute.get(self, ())) \
                 and not env.is_protected(self, record):
             # self must be computed on record
@@ -941,6 +942,7 @@ class Field(MetaField('DummyField', (object,), {})):
                 self.compute_value(recs)
             except (AccessError, MissingError):
                 self.compute_value(record)
+            recomputed = True
 
         try:
             value = env.cache.get(record, self)
@@ -949,6 +951,8 @@ class Field(MetaField('DummyField', (object,), {})):
             if self.store and record.id:
                 # real record: fetch from database
                 recs = record._in_cache_without(self)
+                if recomputed and self.compute_sudo:
+                    recs = recs.sudo()
                 try:
                     recs._fetch_field(self)
                 except AccessError:
@@ -2593,8 +2597,8 @@ class Many2one(_Relational):
         else:
             id_ = None
 
-        if self.delegate and record and not record.id:
-            # the parent record of a new record is a new record
+        if self.delegate and record and not any(record._ids):
+            # if all records are new, then so is the parent
             id_ = id_ and NewId(id_)
 
         return id_
