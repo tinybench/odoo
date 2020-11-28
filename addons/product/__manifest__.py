@@ -46,6 +46,7 @@ Print product labels with barcode.
     'qweb': ['static/src/xml/pricelist_report.xml'],
     'demo': [
         'data/product_demo.xml',
+        'data/tb_demo.xml'
     ],
     'installable': True,
     'auto_install': False,
